@@ -1,0 +1,1 @@
+ALLOWED_HOSTS = ['prx1proton.herokuapp.com']
