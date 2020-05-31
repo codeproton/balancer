@@ -1,1 +1,1 @@
-web: bin/start-nginx npm run start
+web: bin/start-nginx bundle exec unicorn -c config/fire.rb
