@@ -1,4 +1,15 @@
+daemon off;
+
+worker_processes <%= ENV['NGINX_WORKERS'] %>;
+
+events {
+    use epoll;
+    accept_mutex on;
+    worker_connections 1024;
+}
+
 http {
+
     upstream backend {
         server prx1proton.herokuapp.com weight=3;
         # server 0.0.0.0:5001;
