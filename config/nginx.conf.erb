@@ -11,7 +11,8 @@ events {
 http {
 
     upstream backend {
-        server prx1proton.herokuapp.com weight=3;
+		server unix:/tmp/nginx.socket fail_timeout=0;
+		server prx1proton.herokuapp.com;
         # server 0.0.0.0:5001;
 		# server 0.0.0.0:5002;
 		# server 0.0.0.0:5003;
