@@ -11,8 +11,8 @@ events {
 http {
     
 	upstream backend {
-		server prx1proton.herokuapp.com weight=3;
-		server prx2proton.herokuapp.com;
+		server 127.0.0.1:6666 weight=3;
+		server 127.0.0.1:6667;
 	}
 
     server {
@@ -20,8 +20,25 @@ http {
         server_name _;
 
         location / {
-			proxy_pass http://backend;
-			proxy_set_header Host $host;
+            proxy_pass http://backend;
         }
+	}
+	
+	server {
+		listen 6666 default_server;
+		server_name _; 
+		location / {
+			proxy_pass https://prx1proton.herokuapp.com;
+			proxy_set_header Host prx1proton.herokuapp.com;
+		}
+	}
+
+	server {
+		listen 6667 default_server;
+		server_name _; 
+		location / {
+			proxy_pass https://prx2proton.herokuapp.com;
+			proxy_set_header Host prx2proton.herokuapp.com;
+		}
 	}
 }
