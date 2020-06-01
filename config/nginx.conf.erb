@@ -1,27 +1,26 @@
 daemon off;
-
+# Heroku dynos have at least 4 cores
 worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
 
 events {
     use epoll;
     accept_mutex on;
-    worker_connections 1024;
+    worker_connections <%= ENV['NGINX_WORKER_CONNECTIONS'] || 1024 %>;
 }
 
 http {
+    gzip on;
+    gzip_comp_level 2;
+    gzip_min_length 512;
+    server_tokens off;
 
-	gzip on;
-	gzip_comp_level 2;
-	gzip_min_length 512;
-	server_tokens off;
-
-	log_format main '$time_iso8601 - $status $request - client IP: $http_x_forwarded_for - to $upstream_addr - upstream status: $upstream_status, upstream_response_time $upstream_response_time, request_time $request_time';
+    log_format main '$time_iso8601 - $status $request - client IP: $http_x_forwarded_for - to $upstream_addr - upstream status: $upstream_status, upstream_response_time $upstream_response_time, request_time $request_time';
     access_log /dev/stdout main;
     # set the following to "debug" when diagnosing an issue
     error_log /dev/stdout notice;
     log_not_found on;
 
-    #include mime.types;
+    include mime.types;
     default_type application/octet-stream;
     sendfile on;
 
@@ -33,23 +32,21 @@ http {
     # resolver needs to be set because we're using dynamic proxy_pass
     resolver 8.8.8.8;
 
-    upstream backend {
-		server prx1proton.herokuapp.com:443;
-        # server 0.0.0.0:5001;
-		# server 0.0.0.0:5002;
-		# server 0.0.0.0:5003;
+    upstream upstream_app_b {
+        server prx1proton.herokuapp.com:443;
     }
 
-	server {
-		listen <%= ENV["PORT"] %>;
-		server_name _;
+    server {
+        listen <%= ENV["PORT"] %>;
+        server_name _;
 
-		location / {
-			proxy_pass https://backend;
-            proxy_ssl_name $http_host;
+        location / {
+            set $upstream upstream_app_a;
+            proxy_pass https://$upstream;
+            proxy_ssl_name prx1proton.herokuapp.com;
             proxy_set_header x-forwarded-host $host;
             proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header Host $http_host;
-		}
-	}
+            proxy_set_header Host prx1proton.herokuapp.com;
+        }
+    }
 }
