@@ -1,0 +1,20 @@
+{
+  "name": "balancer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/fire.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkingboos/CodeProton.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zkingboos/CodeProton/issues"
+  },
+  "homepage": "https://github.com/zkingboos/CodeProton#readme"
+}
