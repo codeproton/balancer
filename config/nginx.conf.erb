@@ -12,7 +12,7 @@ http {
 
 	gzip on;
 	gzip_comp_level 2;
-	gzip_min_legth 512;
+	gzip_min_length 512;
 	server_tokens off;
 
 	log_format main '$time_iso8601 - $status $request - client IP: $http_x_forwarded_for - to $upstream_addr - upstream status: $upstream_status, upstream_response_time $upstream_response_time, request_time $request_time';
