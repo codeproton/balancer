@@ -25,7 +25,7 @@ http {
         server_name _;
 
         location / {
-            proxy_pass prx1proton.herokuapp.com;
+            proxy_pass https://prx1proton.herokuapp.com;
             proxy_set_header Host prx1proton.herokuapp.com;
         }
     }
